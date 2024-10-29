@@ -363,7 +363,28 @@ Para ver a tabela criada, vá no terminal powershell:
 
 ## Product
 
-## Prop
+```java
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Table(value = "products")
+public class Product {
+
+    @PrimaryKey
+    private UUID id;
+    private String department;
+    private Double price;
+    private Instant moment;
+    private String name;
+    private String description;
+
+
+    private final List<@Frozen Prop> props = new ArrayList<>();
+}
+```
+
+## Prop (pacote embedded)
 
 A anotação UserDefinedType, especificando que essa classe é um tipo definido pelo usuário. Dentro dela, passamos o tipo
 que está registrado no banco do Cassandra, "prop".
@@ -381,3 +402,117 @@ public class Prop {
     private PropType type;
 }
 ```
+
+# Endpoints
+
+## Department
+
+## findAll
+
+## findById
+
+## Insert
+
+## Update
+
+## Delete
+
+## Product
+
+Diferente do JPA, quando temos uma entidade aninhada, não precisamos criar um DTO para ela, veja:
+
+Se fosse no JPA, teríamos que criar uma PropsDTO.
+
+```java
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class ProductDTO {
+
+    private UUID id;
+    private String department;
+    private Double price;
+    private Instant moment;
+    private String name;
+    private String description;
+
+    private List<Prop> props = new ArrayList<>();
+
+    public ProductDTO(Product entity) {
+        this.id = entity.getId();
+        this.department = entity.getDepartment();
+        this.price = entity.getPrice();
+        this.moment = entity.getMoment();
+        this.name = entity.getName();
+        this.description = entity.getDescription();
+
+        this.props.addAll(entity.getProps());
+    }
+}
+```
+
+## find by Department name (Query methods)
+
+[Spring Data Cassandra](https://docs.spring.io/spring-data/cassandra/docs/current/reference/html), também tem seus query methods.
+
+Query methods como já sabemos são maneiras de colocar o nome do campo desejado no repository.
+
+Temos os operadores logícos "or", IgnoreCase, etc...
+
+Exemplo:
+
+```java
+Department getById(UUID id);
+```
+
+![img_3.png](img_3.png)
+
+### Repository
+
+```java
+public interface ProductRepository extends CassandraRepository<Product, UUID> {
+
+    @AllowFiltering
+    List<Product> findByDepartment(String department);
+}
+```
+
+### Service
+
+```java
+    public List<ProductDTO> findByDepartment(String text) {
+   List<Product> list;
+
+   if ("".equals(text)) {
+      list = repository.findAll();
+   } else {
+      list = repository.findByDepartment(text);
+   }
+   return list.stream().map(ProductDTO::new).toList();
+}
+```
+
+### Controller
+
+```java
+    @GetMapping
+    public ResponseEntity<List<ProductDTO>> findByDepartment(
+            @RequestParam(name = "department", defaultValue = "") String text) {
+        List<ProductDTO> dto = productService.findByDepartment(text);
+        return ResponseEntity.ok().body(dto);
+    }
+```
+
+## find by description
+
+Criar query method novamente.
+
+### Repository
+
+
+### Service
+
+### Controller
+
+
