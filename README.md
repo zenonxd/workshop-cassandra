@@ -57,7 +57,7 @@ Vamos falar sobre a documentação do Cassandra.
 O cassandra preconiza (nos orienta) que precisamos moldar os dados orientado para as consultas que vamos precisar (query-driven modelling). 
 [Veja aqui](https://cassandra.apache.org/doc/4.1/cassandra/data_modeling/intro.html#query-driven-modeling)
 
-Para batermos o martelo e decidir como vamos distribuir nossa UML em tabelas, temos que nos perguntar: quais as consultas mais frequentes/importantes que faremos?
+Para batermos o martelo e decidir como vamos a nossa UML em tabelas, temos que nos perguntar: quais as consultas mais frequentes/importantes que faremos?
 
 Além disso, na hora de modelar os dados não temos conceitos de relacionamentos, transações, junções (join).
 
@@ -361,3 +361,23 @@ Para ver a tabela criada, vá no terminal powershell:
 
 ![img_2.png](img_2.png)
 
+## Product
+
+## Prop
+
+A anotação UserDefinedType, especificando que essa classe é um tipo definido pelo usuário. Dentro dela, passamos o tipo
+que está registrado no banco do Cassandra, "prop".
+
+```java
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@UserDefinedType("prop")
+public class Prop {
+
+    private String name;
+    private String value;
+    private PropType type;
+}
+```
