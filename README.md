@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/static/v1?label=Spring Essential - Dev Superior&message=Workshop Cassandra&color=8257E5&labelColor=000000" alt="workshop mongodb" />
+  <img src="https://img.shields.io/static/v1?label=Spring Essential - Dev Superior&message=Workshop Cassandra&color=8257E5&labelColor=000000" alt="workshop cassandra" />
 </p>
 
 # Objetivo
